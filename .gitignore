@@ -1,0 +1,15 @@
+node_modules/
+.profile/
+receipts/*.json
+!receipts/example.json
+receipts/.salt
+receipts/*.commit.json
+cards/*.png
+cards/*.html
+LAUNCH-PROMPT.md
+LAUNCH-REPORT.md
+LAUNCH.md
+receipts/adapter-fixes.md
+!cards/example-card.png
+.playwright-mcp/
+.claude/

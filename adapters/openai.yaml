@@ -1,0 +1,32 @@
+platform: openai
+name: ChatGPT
+domains: [chatgpt.com, openai.com]
+login_url: https://chatgpt.com/auth/login
+verified: false
+last_checked: null
+checks:
+  - id: openai.improve_model
+    module: settings_sweep
+    title: Improve the model for everyone (AI training)
+    url: https://chatgpt.com/#settings/DataControls
+    find: Settings > Data controls > "Improve the model for everyone"
+    recommended: off
+    action: toggle
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://help.openai.com/en/articles/7730893-data-controls-faq
+
+  - id: openai.chats
+    module: recordings_purge
+    title: ChatGPT chat history
+    url: https://chatgpt.com/#settings/DataControls
+    find: The chat history count (sidebar) and the "Delete all chats" option under Settings > Data controls (Archive all chats is in the same place)
+    recommended: "Export first, then delete all chats only if I confirm"
+    action: delete
+    count: true
+    export_url: https://chatgpt.com/#settings/DataControls
+    risk: high          # many people rely on chat history; always ask
+    reversible: false
+    docs_checked: 2026-10-26
+    help_url: https://help.openai.com/en/articles/8809935-how-to-delete-and-archive-chats-in-chatgpt

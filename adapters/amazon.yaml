@@ -1,0 +1,56 @@
+platform: amazon
+name: Amazon (Alexa and ads)
+domains: [amazon.com]
+login_url: https://www.amazon.com/   # /ap/signin now 404s without query params; use the Sign in link
+verified: false
+last_checked: null
+notes: Amazon changed Alexa voice-processing options in 2025 for some Echo devices. Record what options are actually offered.
+checks:
+  - id: amazon.alexa_voice_history
+    module: recordings_purge
+    title: Alexa voice recordings
+    url: https://www.amazon.com/alexa-privacy/apd/rvh
+    find: The "Review Alexa History" page (Alexa Privacy). Set the date filter to all history and record how many voice recordings are stored. "Delete all history" clears them.
+    recommended: Delete all recordings
+    action: delete
+    count: true
+    risk: medium
+    reversible: false
+    docs_checked: 2026-10-26
+    help_url: https://www.amazon.com/gp/help/customer/display.html?nodeId=GVP69FUJ48X9DK8V
+
+  - id: amazon.alexa_retention
+    module: settings_sweep
+    title: Alexa recording retention
+    url: https://www.amazon.com/alexa-privacy/apd/myad
+    find: The "Manage your Alexa data" page, voice recordings section, "Choose how long to save recordings"
+    recommended: "Don't save recordings (or the shortest option offered)"
+    action: toggle
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://www.amazon.com/gp/help/customer/display.html?nodeId=GVP69FUJ48X9DK8V
+
+  - id: amazon.alexa_improve
+    module: settings_sweep
+    title: Use voice recordings to improve Amazon services
+    url: https://www.amazon.com/alexa-privacy/apd/myad
+    find: On the "Manage Your Alexa Data" page, the "Help improve Alexa" section and its "Use of voice recordings" switch (check any per-family-member switches too)
+    recommended: off
+    action: toggle
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://www.amazon.com/gp/help/customer/display.html?nodeId=GVP69FUJ48X9DK8V
+
+  - id: amazon.interest_ads
+    module: settings_sweep
+    title: Interest-based ads
+    url: https://www.amazon.com/adprefs
+    find: The "Advertising Preferences" choice to show or not show interest-based ads
+    recommended: "Do not show me interest-based ads provided by Amazon"
+    action: toggle
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://www.amazon.com/gp/help/customer/display.html?nodeId=GLVB9XDF9M8MU7UZ

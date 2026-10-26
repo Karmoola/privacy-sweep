@@ -1,0 +1,56 @@
+platform: x
+name: X (Twitter)
+domains: [x.com]
+login_url: https://x.com/login
+verified: false
+last_checked: null
+checks:
+  - id: x.grok_training
+    module: settings_sweep
+    title: Grok and third-party AI training on my posts
+    url: https://x.com/settings/grok_settings
+    find: 'Settings > Privacy and safety > Data sharing and personalization > "Grok & Third-party Collaborators": the option allowing my public data and Grok interactions to be used for training and fine-tuning by Grok and third-party collaborators'
+    recommended: off
+    action: toggle
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://help.x.com/en/using-x/about-grok
+
+  - id: x.personalized_ads
+    module: settings_sweep
+    title: Personalised ads
+    url: https://x.com/settings/ads_preferences
+    find: The "Personalised ads" switch
+    recommended: off
+    action: toggle
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://help.x.com/en/safety-and-security/privacy-controls-for-tailored-ads
+
+  - id: x.grok_chats
+    module: recordings_purge
+    title: Grok conversation history
+    url: https://x.com/settings/grok_settings
+    find: On the "Grok & Third-party Collaborators" settings page, the "Delete conversation history" option (Grok history on grok.com is separate)
+    recommended: Delete
+    action: delete
+    risk: medium
+    reversible: false
+    docs_checked: 2026-10-26
+    needs_check: true
+    needs_check_note: Searched 'help.x.com Grok delete conversation history settings'; help.x.com/en/using-x/about-grok returned 403 and no official page mentions the delete option. Only third-party guides describe it.
+
+  - id: x.connected_apps
+    module: app_audit
+    title: Connected apps
+    url: https://x.com/settings/connected_apps
+    find: The list of connected apps with their permissions and approval dates
+    recommended: "Revoke unrecognised or unused"
+    action: revoke
+    count: true
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://help.x.com/en/managing-your-account/connect-or-revoke-access-to-third-party-apps

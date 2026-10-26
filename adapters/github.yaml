@@ -1,0 +1,44 @@
+platform: github
+name: GitHub
+domains: [github.com]
+login_url: https://github.com/login
+verified: false
+last_checked: null
+checks:
+  - id: github.oauth_apps
+    module: app_audit
+    title: Authorized OAuth apps
+    url: https://github.com/settings/applications
+    find: The "Authorized OAuth Apps" tab, each app's scopes and last-used date
+    recommended: "Revoke apps unused in 12+ months or with repo/admin scopes I don't need"
+    action: revoke
+    count: true
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://docs.github.com/en/apps/oauth-apps/using-oauth-apps/reviewing-your-authorized-oauth-apps
+
+  - id: github.github_apps
+    module: app_audit
+    title: Authorized GitHub Apps
+    url: https://github.com/settings/apps/authorizations
+    find: The "Authorized GitHub Apps" list
+    recommended: "Revoke unrecognised or unused"
+    action: revoke
+    count: true
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://docs.github.com/en/apps/using-github-apps/reviewing-and-revoking-authorization-of-github-apps
+
+  - id: github.copilot_training
+    module: settings_sweep
+    title: Allow GitHub to use my data for product improvement / AI model training
+    url: https://github.com/settings/copilot
+    find: In Copilot settings, the "Allow GitHub to use my data for AI model training" dropdown. Since 24 April 2026 Copilot Free, Pro, Pro+ and Max interactions may be used for training unless I opt out. Business and Enterprise seats may not show it.
+    recommended: Disabled
+    action: toggle
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://docs.github.com/en/copilot/how-tos/manage-your-account/manage-policies

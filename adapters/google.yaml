@@ -1,0 +1,109 @@
+platform: google
+name: Google
+domains: [google.com, myactivity.google.com, myaccount.google.com, myadcenter.google.com, gemini.google.com]
+login_url: https://accounts.google.com
+verified: false        # set true once a contributor confirms every check on a live account
+last_checked: null     # YYYY-MM-DD of last confirmation
+checks:
+  - id: google.web_app_activity
+    module: settings_sweep
+    title: Web & App Activity
+    url: https://myactivity.google.com/activitycontrols
+    find: The "Web & App Activity" control and whether it is On or Off
+    recommended: "Off (or On with auto-delete at 3 months if I want personalised results)"
+    action: toggle
+    risk: low
+    reversible: true
+    side_effects: Less personalised Search, Maps and Assistant suggestions.
+    docs_checked: 2026-10-26
+    help_url: https://support.google.com/accounts/answer/54068
+
+  - id: google.youtube_history
+    module: settings_sweep
+    title: YouTube History
+    url: https://myactivity.google.com/activitycontrols
+    find: The "YouTube History" control
+    recommended: "Off, or auto-delete at 3 months"
+    action: toggle
+    risk: low
+    reversible: true
+    side_effects: Weaker YouTube recommendations.
+    docs_checked: 2026-10-26
+    help_url: https://support.google.com/youtube/answer/95725
+
+  - id: google.timeline
+    module: settings_sweep
+    title: Timeline (Location History)
+    url: https://myactivity.google.com/activitycontrols
+    find: The "Timeline" control (formerly Location History) and whether it is On or Off. Timeline is now saved on each signed-in device, with an optional encrypted cloud backup, so this page may only link to device settings.
+    recommended: "Off. If it is device-only, mark manual and tell me to turn it off in Google Maps on my phone."
+    action: toggle
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://support.google.com/accounts/answer/3118687
+
+  - id: google.personalized_ads
+    module: settings_sweep
+    title: Personalised ads
+    url: https://myadcenter.google.com/
+    find: The "Personalised ads" switch
+    recommended: off
+    action: toggle
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://support.google.com/My-Ad-Center-Help/answer/12155656
+
+  - id: google.gemini_activity
+    module: settings_sweep
+    title: Gemini Apps Activity (used for AI training and human review)
+    url: https://myactivity.google.com/product/gemini
+    find: The "Keep Activity" control near the top of the Gemini Apps Activity page (On or Off). Also reachable in Gemini under Settings & help, then Activity.
+    recommended: off
+    action: toggle
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://support.google.com/gemini/answer/13278892?hl=en&co=GENIE.Platform%3DDesktop
+
+  - id: google.voice_audio
+    module: recordings_purge
+    title: Stored Assistant voice and audio recordings
+    url: https://myactivity.google.com/activitycontrols
+    find: Inside Web & App Activity, the "Include voice and audio activity" option, and the count of saved audio items under Manage activity filtered to Assistant / Voice
+    recommended: "Untick voice and audio, then delete stored audio"
+    action: delete
+    count: true
+    export_url: https://takeout.google.com/
+    risk: medium
+    reversible: false
+    docs_checked: 2026-10-26
+    help_url: https://support.google.com/websearch/answer/6030020?hl=en&co=GENIE.Platform%3DDesktop
+
+  - id: google.gemini_chats
+    module: recordings_purge
+    title: Gemini chat history
+    url: https://myactivity.google.com/product/gemini
+    find: The list of saved Gemini activity and its count
+    recommended: "Delete all, then set auto-delete"
+    action: delete
+    count: true
+    export_url: https://takeout.google.com/
+    risk: medium
+    reversible: false
+    docs_checked: 2026-10-26
+    help_url: https://support.google.com/gemini/answer/13278892?hl=en&co=GENIE.Platform%3DDesktop
+
+  - id: google.third_party_apps
+    module: app_audit
+    title: Third-party apps and services with account access
+    url: https://myaccount.google.com/linkedapps
+    find: The "Linked apps" page listing each app or service linked to my Google Account. Open each one to see what access it has (for example Gmail read) and any last-used date shown.
+    recommended: "Revoke apps I don't recognise or haven't used in 12+ months"
+    action: revoke
+    count: true
+    risk: low
+    reversible: true   # I can reconnect by signing in to the app again
+    docs_checked: 2026-10-26
+    help_url: https://support.google.com/accounts/answer/13533235

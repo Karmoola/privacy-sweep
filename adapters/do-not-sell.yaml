@@ -1,0 +1,57 @@
+platform: do_not_sell
+name: Global Privacy Control and opt-out of sale
+domains: ["*"]   # applies to sites on the user-approved list only
+login_url: null
+verified: false
+last_checked: null
+notes: >
+  GPC is a browser signal that California, Colorado, Connecticut, New Jersey and several other US states
+  require businesses to honour as an opt-out of sale/sharing. Opt-out links are usually in the site footer
+  as "Do Not Sell or Share My Personal Information" or "Your Privacy Choices".
+checks:
+  - id: dns.gpc_browser
+    module: do_not_sell
+    title: Turn on Global Privacy Control in my everyday browser
+    url: null
+    find: Which browser I use day to day
+    recommended: >
+      Firefox: Settings > Privacy & Security > "Tell websites not to sell or share my data".
+      Brave and DuckDuckGo: on by default, confirm.
+      Chrome / Edge: no built-in switch; install the Privacy Sweep extension (v2) or another GPC extension.
+      This changes my own browser, so give me the steps and mark manual.
+    action: manual
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://support.mozilla.org/en-US/kb/global-privacy-control
+
+  - id: dns.gpc_check
+    module: do_not_sell
+    title: Confirm GPC is being sent
+    url: https://globalprivacycontrol.org/
+    find: 'The status bar at the top of the page: a green dot with "GPC signal detected." means GPC is on, a red dot means it is not (only meaningful in my everyday browser, not the automation profile)'
+    recommended: "Ask me to open the URL in my everyday browser and report what it says"
+    action: manual
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://globalprivacycontrol.org/
+
+  - id: dns.site_optout
+    module: do_not_sell
+    title: Opt-out-of-sale request per site
+    url: per_site
+    per_site: true
+    find: >
+      On each approved site, the footer link "Do Not Sell or Share My Personal Information", "Your Privacy Choices"
+      or similar. Follow it and choose the opt-out.
+    recommended: >
+      Opt out of sale, sharing and targeted advertising. If the form only needs a toggle or email I already
+      have on file there, submit it. If it asks for ID, address, phone or anything new, stop and mark manual.
+      If no link exists, mark not_found.
+    action: submit_form
+    count: true
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://cppa.ca.gov/faq.html

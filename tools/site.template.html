@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Privacy Sweep</title>
+<meta name="description" content="Switch off the tracking, recordings and data sharing your accounts turned on for you. Free, runs in your browser, nothing leaves your device.">
+<style>
+/*__FONTS__*/
+:root{--bg:#f4f2ee;--card:#fff;--ink:#1d1c1a;--mute:#6b6862;--line:#dedad2;--accent:#1f6f4a;--accent-bg:#e5f1ea;--warn:#9a5b00;--warn-bg:#fbf0de;--chip:#ece9e3}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161614;--card:#1f1f1c;--ink:#ecebe7;--mute:#a29f97;--line:#34332f;--accent:#6fd1a0;--accent-bg:#1d3329;--warn:#f0b35a;--warn-bg:#3a2d17;--chip:#2a2a26}}
+:root[data-theme="dark"]{--bg:#161614;--card:#1f1f1c;--ink:#ecebe7;--mute:#a29f97;--line:#34332f;--accent:#6fd1a0;--accent-bg:#1d3329;--warn:#f0b35a;--warn-bg:#3a2d17;--chip:#2a2a26}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent)}
+.mono{font-family:"Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header{padding:40px 0 8px}
+header h1{font-family:"Plex Mono",ui-monospace,monospace;font-size:clamp(28px,5vw,44px);letter-spacing:.06em;margin:0}
+header p{max-width:640px;color:var(--mute);font-size:18px;margin:10px 0 0}
+.paths{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:28px 0}
+.path{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.path h3{margin:0 0 4px;font-size:16px}.path p{margin:0 0 10px;color:var(--mute);font-size:14px}
+.path .tag{font:600 11px/1 "Plex Mono",monospace;letter-spacing:.08em;color:var(--mute);text-transform:uppercase}
+button,.btn{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:7px;padding:7px 12px;cursor:pointer;text-decoration:none;display:inline-block}
+button:hover,.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:28px;align-items:start;padding-bottom:60px}
+@media (max-width:960px){.layout{grid-template-columns:minmax(0,1fr)}.side{position:static!important}}
+.picker{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 18px}
+.picker label{display:flex;gap:6px;align-items:center;background:var(--chip);border-radius:99px;padding:6px 12px;font-size:14px;cursor:pointer;user-select:none}
+.plat{margin:22px 0 8px;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.plat h2{font:700 15px/1.2 "Plex Mono",monospace;letter-spacing:.08em;margin:0;text-transform:uppercase}
+.plat .note{font-size:13px;color:var(--mute)}
+.check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px}
+.check.done{border-color:var(--accent);background:linear-gradient(var(--accent-bg),var(--accent-bg)) left/4px 100% no-repeat,var(--card)}
+.check .top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.check h4{margin:0;font-size:16px}
+.check .mod{font:600 11px/1 "Plex Mono",monospace;letter-spacing:.06em;color:var(--mute);text-transform:uppercase;white-space:nowrap;margin-top:4px}
+.check .find{color:var(--mute);font-size:14px;margin:6px 0}
+.check .rec{font-size:14px;margin:0 0 10px}
+.check .warn{background:var(--warn-bg);color:var(--warn);font-size:13px;border-radius:6px;padding:6px 10px;margin:0 0 10px}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.row .st[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.nums{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:14px;color:var(--mute)}
+.nums input{width:90px;font:inherit;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.side{position:sticky;top:16px}
+.side h3{font:700 13px/1 "Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.preview{position:relative;width:100%;aspect-ratio:1080/1350;overflow:hidden;border-radius:8px;border:1px solid var(--line)}
+.preview .scale{position:absolute;left:0;top:0;width:1080px;height:1350px;transform-origin:0 0}
+.side{min-width:0}
+.side .row{margin-top:10px}
+textarea{width:100%;min-height:110px;font:12px/1.4 "Plex Mono",monospace;border:1px solid var(--line);border-radius:7px;padding:8px;background:var(--card);color:var(--ink)}
+details{margin-top:14px;font-size:14px}summary{cursor:pointer;color:var(--mute)}
+.msg{font-size:13px;color:var(--mute);min-height:1.2em;margin-top:6px}
+.about{padding:8px 16px 40px;max-width:760px}.about h2{font:700 15px/1.2 "Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}.about p{color:var(--mute)}
+footer{border-top:1px solid var(--line);padding:20px 0 40px;color:var(--mute);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>PRIVACY SWEEP</h1>
+  <p>Your accounts switched on tracking, kept your voice recordings, and let old apps read your email. Here's every setting, one link each. Nothing you tick here leaves your browser.</p>
+</header>
+
+<div class="paths">
+  <div class="path"><div class="tag">No AI · 20 to 40 min</div><h3>Do it yourself</h3><p>Pick your accounts below, open each link, flip the setting, tick it off.</p><a class="btn primary" href="#start">Start</a></div>
+  <div class="path"><div class="tag">Browser agent · 10 to 20 min</div><h3>Let a browser agent do it</h3><p>ChatGPT agent or Atlas, Perplexity Comet, Claude in Chrome, Gemini in Chrome, Copilot in Edge. Note: the agent can read pages you're logged into while it works.</p><button id="copyPrompt" class="btn primary">Copy the prompt</button> <a class="btn" id="dlPrompt" download="PROMPT-browser-agent.md">Download</a></div>
+  <div class="path"><div class="tag">Coding agent · 15 min</div><h3>Run it from a terminal</h3><p>Claude Code, Codex, Gemini CLI, Cursor or Copilot with Playwright MCP.</p><a class="btn" href="https://github.com/Karmoola/privacy-sweep" id="repoLink">Open the repo</a></div>
+</div>
+
+<div class="layout" id="start">
+  <main>
+    <div class="mono" style="font-size:13px;color:var(--mute);letter-spacing:.06em">WHICH ACCOUNTS DO YOU HAVE?</div>
+    <div class="picker" id="picker"></div>
+    <div id="list"></div>
+  </main>
+  <aside class="side">
+    <h3>Your receipt</h3>
+    <div class="preview" id="preview"><div class="scale" id="scale"></div></div>
+    <div class="row">
+      <button class="btn primary" id="dlCard">Download image</button>
+      <button class="btn" id="reset">Start over</button>
+    </div>
+    <div class="msg" id="msg"></div>
+    <details id="importBox">
+      <summary>Used a browser agent? Paste its receipt JSON</summary>
+      <textarea id="importText" placeholder='{"run_at":"...","items":[...]}'></textarea>
+      <div class="row"><button class="btn" id="importBtn">Import</button></div>
+    </details>
+  </aside>
+</div>
+</div>
+<section class="wrap about" id="about">
+  <h2>Why we built this</h2>
+  <p>Your accounts are set to collect as much as possible by default. Privacy Sweep is one way to take some control back: free, fast, open source, and it can't see your results. No account, no analytics, everything stays in your browser.</p>
+  <p>It's a cleanup. The bigger fix is a web where you don't have to hand your data over to begin with: you prove what's needed ("I'm over 18", "I can afford this") and keep the rest. That's what we're building at <a href="https://midnight.network" target="_blank" rel="noopener">Midnight</a>.</p>
+</section>
+<footer><div class="wrap">Made by people building Midnight, where proving something shouldn't mean giving everything away. · Privacy Sweep v__VERSION__ · <a href="https://github.com/Karmoola/privacy-sweep">Code on GitHub</a> · Settings move often: found one that's wrong? Open an issue. Not legal advice.</div></footer>
+
+<script>/*__HTI__*/</script>
+<script>
+/*__CORE__*/
+const DATA = /*__DATA__*/null;
+const PROMPT = /*__PROMPT__*/"";
+const KEY = "privacy-sweep-v1";
+const REPO = location.protocol.startsWith("http") ? (location.host + location.pathname).replace(/\/(index\.html)?$/, "") : undefined;
+const STATUS_BUTTONS = {
+  settings_sweep: [["changed","I switched it off"],["already_ok","Was already off"],["skipped","Keep it on"],["not_available","No option for me"],["not_found","Couldn't find it"]],
+  recordings_purge: [["changed","Deleted"],["already_ok","Nothing stored"],["skipped","Keep them"],["not_found","Couldn't find it"]],
+  app_audit: [["changed","Removed some"],["already_ok","All fine"],["skipped","Skip"],["not_found","Couldn't find it"]],
+  do_not_sell: [["changed","Done"],["manual","Later"],["skipped","Skip"],["not_found","Couldn't find it"]],
+};
+const MOD_LABEL = { settings_sweep:"Setting", recordings_purge:"Recordings", app_audit:"Connected apps", do_not_sell:"Do not sell" };
+
+let state = { platforms: [], checks: {}, imported: null, run_at: null };
+try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.checks) state = Object.assign(state, s); } catch {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+const $ = (s) => document.querySelector(s);
+const escH = (t) => String(t ?? "").replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" })[c]);
+
+function receipt() {
+  if (state.imported) return state.imported;
+  const items = [];
+  for (const a of DATA) if (state.platforms.includes(a.platform)) for (const c of a.checks) {
+    const v = state.checks[c.id]; if (!v || !v.status) continue;
+    const it = { id: c.id, platform: a.platform, module: c.module, title: c.title, status: v.status };
+    if (c.count || c.module === "recordings_purge") {
+      if (v.before !== undefined && v.before !== "") it.count_before = Number(v.before);
+      if (c.module === "recordings_purge" && v.status === "changed") it.count_after = 0;
+      if (v.after !== undefined && v.after !== "") it.count_after = Number(v.after);
+    }
+    if (v.oldest) it.oldest_app = v.oldest;
+    items.push(it);
+  }
+  return { run_at: state.run_at || new Date().toISOString(), items };
+}
+
+function numFields(c, v) {
+  const f = (k, label, ph) => `<label>${label} <input type="number" min="0" data-id="${c.id}" data-k="${k}" value="${escH(v[k])}" placeholder="${ph}"></label>`;
+  if (c.module === "recordings_purge" && c.count) return `<div class="nums">${f("before","How many were stored?","e.g. 1200")}</div>`;
+  if (c.module === "app_audit") return `<div class="nums">${f("before","Apps listed","e.g. 23")}${f("after","Apps left","e.g. 9")}${f("oldest","Oldest year","e.g. 2014")}</div>`;
+  if (c.module === "do_not_sell" && c.count) return `<div class="nums">${f("after","Sites opted out","e.g. 20")}</div>`;
+  if (c.count) return `<div class="nums">${f("before","Count shown","")}</div>`;
+  return "";
+}
+
+function renderList() {
+  $("#picker").innerHTML = DATA.map((a) => `<label><input type="checkbox" value="${a.platform}" ${state.platforms.includes(a.platform) ? "checked" : ""}> ${escH(a.name)}</label>`).join("");
+  const chosen = DATA.filter((a) => state.platforms.includes(a.platform));
+  $("#list").innerHTML = chosen.length ? chosen.map((a) => {
+    const done = a.checks.filter((c) => state.checks[c.id]?.status).length;
+    return `<div class="plat"><h2>${escH(a.name)}</h2><span class="note">${done}/${a.checks.length} done</span></div>` +
+      (a.notes ? `<p class="note" style="margin:0 0 8px">${escH(a.notes)}</p>` : "") +
+      a.checks.map((c) => {
+        const v = state.checks[c.id] || {};
+        const open = c.url && c.url.startsWith("http") ? `<a class="btn primary" href="${escH(c.url)}" target="_blank" rel="noopener">Open setting ↗</a>` : "";
+        const exp = c.export_url ? `<p class="warn">Deleting can't be undone. <a href="${escH(c.export_url)}" target="_blank" rel="noopener">Download a copy first</a> if you want one.</p>` : (c.module === "recordings_purge" ? `<p class="warn">Deleting can't be undone.</p>` : "");
+        return `<div class="check ${v.status ? "done" : ""}">
+          <div class="top"><h4>${escH(c.title)}</h4><span class="mod">${MOD_LABEL[c.module]}</span></div>
+          <p class="find">${escH(c.find)}</p>
+          <p class="rec"><b>Recommended:</b> ${escH(c.recommended)}</p>${exp}
+          <div class="row">${open}${STATUS_BUTTONS[c.module].map(([s, l]) => `<button class="st" data-id="${c.id}" data-s="${s}" aria-pressed="${v.status === s}">${l}</button>`).join("")}</div>
+          ${numFields(c, v)}
+        </div>`;
+      }).join("");
+  }).join("") : `<p style="color:var(--mute)">Pick the accounts you have to see their settings.</p>`;
+}
+
+function renderCard() {
+  const r = receipt();
+  const box = $("#scale");
+  if (!r.items.length) {
+    box.innerHTML = renderReceipt({ run_at: new Date().toISOString(), items: [] }, { repo: REPO });
+  } else {
+    box.innerHTML = renderReceipt(r, { repo: REPO, commit: state.hash || null });
+  }
+  const w = $("#preview").clientWidth; box.style.transform = `scale(${w / 1080})`;
+}
+
+async function sha256Hex(text) {
+  try { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join(""); }
+  catch { return null; }
+}
+
+async function update() {
+  save(); renderList();
+  const r = receipt();
+  state.hash = r.items.length ? await sha256Hex(JSON.stringify(r.items) + (state.salt ||= [...crypto.getRandomValues(new Uint8Array(16))].join("."))) : null;
+  save(); renderCard();
+}
+
+document.addEventListener("change", (e) => {
+  const t = e.target;
+  if (t.closest("#picker")) {
+    state.platforms = [...document.querySelectorAll("#picker input:checked")].map((i) => i.value);
+    state.imported = null; update();
+  } else if (t.dataset.k) {
+    (state.checks[t.dataset.id] ||= {})[t.dataset.k] = t.value; state.imported = null; update();
+  }
+});
+document.addEventListener("click", (e) => {
+  const b = e.target.closest(".st"); if (!b) return;
+  const v = (state.checks[b.dataset.id] ||= {});
+  v.status = v.status === b.dataset.s ? undefined : b.dataset.s;
+  state.run_at = new Date().toISOString(); state.imported = null; update();
+});
+$("#reset").onclick = () => { if (confirm("Clear your progress on this device?")) { state = { platforms: [], checks: {}, imported: null, run_at: null }; update(); } };
+$("#copyPrompt").onclick = async () => {
+  try { await navigator.clipboard.writeText(PROMPT); $("#copyPrompt").textContent = "Copied. Paste it into your agent"; }
+  catch { $("#copyPrompt").textContent = "Copy blocked: use Download"; }
+};
+$("#dlPrompt").href = URL.createObjectURL(new Blob([PROMPT], { type: "text/markdown" }));
+$("#importBtn").onclick = () => {
+  try {
+    const raw = $("#importText").value; const j = JSON.parse(raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1));
+    if (!Array.isArray(j.items)) throw new Error("No items list");
+    j.items = j.items.filter((i) => i && i.id && i.platform && i.module && STATUSES.includes(i.status));
+    state.imported = j; update(); $("#msg").textContent = `Imported ${j.items.length} items.`;
+  } catch (err) { $("#msg").textContent = "That doesn't look like a Privacy Sweep receipt: " + err.message; }
+};
+$("#dlCard").onclick = async () => {
+  if (!window.htmlToImage) { $("#msg").textContent = "Image export didn't load. Take a screenshot of the receipt instead."; return; }
+  const stage = $("#scale .ps-stage"); const t = $("#scale").style.transform; $("#scale").style.transform = "none";
+  try {
+    const url = await htmlToImage.toPng(stage, { pixelRatio: 2, width: 1080, height: 1350 });
+    const a = document.createElement("a"); a.href = url; a.download = "privacy-sweep-receipt.png"; a.click();
+    $("#msg").textContent = "Saved. Post it with #PrivacySweep.";
+  } catch { $("#msg").textContent = "Couldn't make the image. Take a screenshot instead."; }
+  finally { $("#scale").style.transform = t; }
+};
+window.addEventListener("resize", renderCard);
+update();
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "tool_version": "0.1.0",
+  "run_at": "2026-10-26T14:05:00Z",
+  "modules": ["settings_sweep", "recordings_purge", "app_audit", "do_not_sell"],
+  "items": [
+    { "id": "google.web_app_activity", "platform": "google", "module": "settings_sweep", "title": "Web & App Activity", "status": "changed", "before": "on", "after": "off", "at": "2026-10-26T14:07:10Z" },
+    { "id": "google.youtube_history", "platform": "google", "module": "settings_sweep", "title": "YouTube History", "status": "changed", "before": "on", "after": "auto-delete 3 months", "at": "2026-10-26T14:07:40Z" },
+    { "id": "google.timeline", "platform": "google", "module": "settings_sweep", "title": "Timeline (Location History)", "status": "manual", "before": "device-only", "note": "Turn off in Google Maps on phone" },
+    { "id": "google.personalized_ads", "platform": "google", "module": "settings_sweep", "title": "Personalised ads", "status": "changed", "before": "on", "after": "off", "at": "2026-10-26T14:08:30Z" },
+    { "id": "google.gemini_activity", "platform": "google", "module": "settings_sweep", "title": "Gemini Apps Activity", "status": "changed", "before": "on", "after": "off", "at": "2026-10-26T14:09:02Z" },
+    { "id": "google.voice_audio", "platform": "google", "module": "recordings_purge", "title": "Assistant voice recordings", "status": "changed", "count_before": 1180, "count_after": 0, "at": "2026-10-26T14:11:15Z" },
+    { "id": "google.gemini_chats", "platform": "google", "module": "recordings_purge", "title": "Gemini chat history", "status": "skipped", "count_before": 214, "note": "User chose to keep" },
+    { "id": "google.third_party_apps", "platform": "google", "module": "app_audit", "title": "Third-party apps", "status": "changed", "count_before": 23, "count_after": 9, "oldest_app": "2014", "at": "2026-10-26T14:14:40Z" },
+
+    { "id": "meta.ad_partner_activity", "platform": "meta", "module": "settings_sweep", "title": "Ads from ad partner activity", "status": "changed", "before": "yes", "after": "no", "at": "2026-10-26T14:16:00Z" },
+    { "id": "meta.off_platform_activity", "platform": "meta", "module": "settings_sweep", "title": "Activity off Meta technologies", "status": "changed", "count_before": 612, "before": "connected", "after": "disconnected", "at": "2026-10-26T14:17:20Z" },
+    { "id": "meta.ai_training_objection", "platform": "meta", "module": "settings_sweep", "title": "Meta AI training", "status": "not_available", "note": "Form not offered in US" },
+    { "id": "meta.ai_chats", "platform": "meta", "module": "recordings_purge", "title": "Meta AI chats", "status": "changed", "count_before": 41, "count_after": 0, "at": "2026-10-26T14:19:00Z" },
+    { "id": "meta.apps_and_websites", "platform": "meta", "module": "app_audit", "title": "Apps logged in with Facebook", "status": "changed", "count_before": 31, "count_after": 6, "oldest_app": "2011", "at": "2026-10-26T14:21:30Z" },
+
+    { "id": "amazon.alexa_voice_history", "platform": "amazon", "module": "recordings_purge", "title": "Alexa voice recordings", "status": "changed", "count_before": 2690, "count_after": 0, "at": "2026-10-26T14:24:00Z" },
+    { "id": "amazon.alexa_retention", "platform": "amazon", "module": "settings_sweep", "title": "Alexa recording retention", "status": "changed", "before": "save until deleted", "after": "don't save", "at": "2026-10-26T14:24:40Z" },
+    { "id": "amazon.alexa_improve", "platform": "amazon", "module": "settings_sweep", "title": "Use voice to improve services", "status": "changed", "before": "on", "after": "off", "at": "2026-10-26T14:25:10Z" },
+    { "id": "amazon.interest_ads", "platform": "amazon", "module": "settings_sweep", "title": "Interest-based ads", "status": "changed", "before": "show", "after": "don't show", "at": "2026-10-26T14:25:50Z" },
+
+    { "id": "openai.improve_model", "platform": "openai", "module": "settings_sweep", "title": "Improve the model for everyone", "status": "changed", "before": "on", "after": "off", "at": "2026-10-26T14:27:00Z" },
+    { "id": "openai.chats", "platform": "openai", "module": "recordings_purge", "title": "ChatGPT chats", "status": "skipped", "count_before": 87, "note": "Kept" },
+
+    { "id": "linkedin.ai_training", "platform": "linkedin", "module": "settings_sweep", "title": "Data for generative AI improvement", "status": "changed", "before": "on", "after": "off", "at": "2026-10-26T14:29:00Z" },
+    { "id": "linkedin.ad_data", "platform": "linkedin", "module": "settings_sweep", "title": "Ads using outside data", "status": "changed", "before": "on", "after": "off", "at": "2026-10-26T14:29:40Z" },
+
+    { "id": "x.grok_training", "platform": "x", "module": "settings_sweep", "title": "Grok training on my posts", "status": "changed", "before": "on", "after": "off", "at": "2026-10-26T14:31:00Z" },
+    { "id": "x.personalized_ads", "platform": "x", "module": "settings_sweep", "title": "Personalised ads", "status": "already_ok", "before": "off" },
+    { "id": "x.connected_apps", "platform": "x", "module": "app_audit", "title": "Connected apps", "status": "changed", "count_before": 14, "count_after": 3, "oldest_app": "2012", "at": "2026-10-26T14:33:00Z" },
+
+    { "id": "github.oauth_apps", "platform": "github", "module": "app_audit", "title": "Authorized OAuth apps", "status": "changed", "count_before": 19, "count_after": 7, "oldest_app": "2015", "at": "2026-10-26T14:35:00Z" },
+
+    { "id": "dns.gpc_browser", "platform": "do_not_sell", "module": "do_not_sell", "title": "GPC in everyday browser", "status": "manual", "note": "Chrome: install extension" },
+    { "id": "dns.site_optout", "platform": "do_not_sell", "module": "do_not_sell", "title": "Opt-out-of-sale requests", "status": "changed", "count_before": 50, "count_after": 34, "note": "34 submitted, 9 no link, 7 needed ID (manual)", "at": "2026-10-26T14:52:00Z" }
+  ]
+}

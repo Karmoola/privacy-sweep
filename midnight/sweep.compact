@@ -1,0 +1,47 @@
+// Privacy Sweep: Midnight contract SKETCH (phase 3).
+// Not compiled yet. Check against the current Compact compiler and the midnight-expert MCP before use.
+//
+// Two jobs:
+//   1. commitReceipt: timestamp a private receipt root (from tools/receipt.mjs). Reveals only a hash.
+//   2. countOptOut:   add one anonymous "I switched off <setting>" to a public tally,
+//                     at most once per person per setting, without revealing who.
+//
+// Honest limit: in v1 the tally is self-attested (one per person, but not proof the setting
+// really changed). Making it verified needs a proof of the settings page itself (zkTLS-style),
+// which is a separate spike.
+
+pragma language_version >= 0.16;
+
+import CompactStandardLibrary;
+
+// Receipt roots, in a tree so a user can later prove "my receipt was committed before date D"
+// with a Merkle path, without revealing which leaf is theirs.
+export ledger receipts: HistoricMerkleTree<20, Bytes<32>>;
+
+// One-time tokens so each person counts once per setting.
+export ledger nullifiers: Set<Bytes<32>>;
+
+// Public tallies: setting id hash -> number of people who switched it off.
+export ledger optOuts: Map<Bytes<32>, Counter>;
+
+// The user's long-lived secret. Stays on their device.
+witness userSecret(): Bytes<32>;
+
+export circuit commitReceipt(root: Bytes<32>): [] {
+  receipts.insert(disclose(root));
+}
+
+export circuit countOptOut(settingId: Bytes<32>): [] {
+  const nul = persistentHash<Vector<3, Bytes<32>>>([pad(32, "sweep:optout"), userSecret(), settingId]);
+  assert(!nullifiers.member(disclose(nul)), "Already counted for this setting");
+  nullifiers.insert(disclose(nul));
+
+  const key = disclose(settingId);
+  if (!optOuts.member(key)) {
+    optOuts.insert(key, default<Counter>);
+  }
+  optOuts.lookup(key).increment(1);
+}
+
+// Phase 3b (unique humans): require a Midnight Passport credential proof inside countOptOut
+// so one person cannot create many secrets and inflate the tallies.

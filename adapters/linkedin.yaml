@@ -1,0 +1,43 @@
+platform: linkedin
+name: LinkedIn
+domains: [linkedin.com]
+login_url: https://www.linkedin.com/login
+verified: false
+last_checked: null
+checks:
+  - id: linkedin.ai_training
+    module: settings_sweep
+    title: Data for generative AI improvement
+    url: https://www.linkedin.com/mypreferences/d/settings/data-for-ai-improvement
+    find: The "Use my data for training content creation AI models" switch
+    recommended: off
+    action: toggle
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://www.linkedin.com/help/linkedin/answer/a6278444
+
+  - id: linkedin.ad_data
+    module: settings_sweep
+    title: Ads using data from outside LinkedIn
+    url: https://www.linkedin.com/mypreferences/d/categories/ads
+    find: 'Settings & Privacy > Advertising data: the settings under Profile data, Activity and inferred data, and Off LinkedIn data, especially "Ads off LinkedIn" (whether LinkedIn uses data from others to show me ads outside LinkedIn)'
+    recommended: "Off for each"
+    action: toggle
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://www.linkedin.com/help/linkedin/answer/62931
+
+  - id: linkedin.permitted_services
+    module: app_audit
+    title: Permitted services
+    url: https://www.linkedin.com/mypreferences/d/permitted-services
+    find: The list of permitted apps and services
+    recommended: "Remove unrecognised or unused"
+    action: revoke
+    count: true
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://www.linkedin.com/help/linkedin/answer/1207

@@ -1,0 +1,71 @@
+platform: meta
+name: Meta (Facebook, Instagram, Meta AI)
+domains: [facebook.com, accountscenter.facebook.com, instagram.com, meta.ai]
+login_url: https://www.facebook.com/login
+verified: false
+last_checked: null
+checks:
+  - id: meta.ad_partner_activity
+    module: settings_sweep
+    title: Ads and content based on activity from other businesses
+    url: https://accountscenter.facebook.com/ads
+    find: Meta Account (Accounts Center) > Your information and permissions > "Activity from other businesses" (formerly "Activity information from ad partners"). It controls whether Meta uses my activity from other businesses to show me ads and other content.
+    recommended: No, don't use this activity to personalise my ads or content
+    action: toggle
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://www.facebook.com/help/568137493302217
+
+  - id: meta.off_platform_activity
+    module: settings_sweep
+    title: Your activity off Meta technologies
+    url: https://accountscenter.facebook.com/info_and_permissions/off_facebook_activity
+    find: Meta removed this setting in the US and a growing list of countries from July 2026 and folded it into "Activity from other businesses". If the old page still loads in my region, use "Manage future activity" and record how many businesses are listed. If it is gone, mark not_available.
+    recommended: "Disconnect future activity, and clear previous activity"
+    action: toggle
+    count: true
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://about.fb.com/news/2026/06/better-personalization-and-changes-to-controls-for-your-activity-from-other-businesses/
+
+  - id: meta.ai_training_objection
+    module: settings_sweep
+    title: Object to Meta using my information for AI
+    url: https://www.facebook.com/privacy/genai
+    find: A link or form to object to my information being used to develop AI at Meta. Availability depends on region (EU, UK and some others).
+    recommended: "Submit the objection if the form is available. If it is not available in my region, mark not_available and record that."
+    action: submit_form
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://www.facebook.com/privacy/genai
+    needs_check: true
+    needs_check_note: "Fetched facebook.com/privacy/genai (from a US location: no objection form, only 'Learn more about model training'), facebook.com/privacy/center, and the region-gated contact form facebook.com/help/contact/6359191084165019 (login wall). Searched 'Meta privacy center object to information used for AI'. Needs a check from an EU/UK account."
+
+  - id: meta.ai_chats
+    module: recordings_purge
+    title: Meta AI chat history
+    url: https://www.meta.ai/
+    find: The chat History list (record the count), then menu > Settings > Data & privacy > Manage your information > "Delete all chats and media". The help page describes the Meta AI app; the web path may differ.
+    recommended: Delete all
+    action: delete
+    count: true
+    risk: medium
+    reversible: false
+    docs_checked: 2026-10-26
+    help_url: https://www.meta.com/help/artificial-intelligence/2457110494637611/
+
+  - id: meta.apps_and_websites
+    module: app_audit
+    title: Apps and websites logged in with Facebook
+    url: https://www.facebook.com/settings?tab=applications
+    find: The list of active and expired apps and websites, with dates
+    recommended: "Remove apps I don't recognise or haven't used in 12+ months"
+    action: revoke
+    count: true
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://www.facebook.com/help/211829542181913

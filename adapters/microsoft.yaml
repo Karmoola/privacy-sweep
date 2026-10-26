@@ -1,0 +1,44 @@
+platform: microsoft
+name: Microsoft
+domains: [microsoft.com, live.com]
+login_url: https://login.live.com
+verified: false
+last_checked: null
+checks:
+  - id: microsoft.personalized_ads
+    module: settings_sweep
+    title: Personalised ads and offers
+    url: https://account.microsoft.com/privacy/ad-settings
+    find: On the "Personalized ads & offers" page, the "See ads that interest you" switch (and the separate third-party ad settings, if shown)
+    recommended: off
+    action: toggle
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://support.microsoft.com/help/4532583
+
+  - id: microsoft.activity_data
+    module: recordings_purge
+    title: Stored activity (browsing, search, location, voice)
+    url: https://account.microsoft.com/privacy
+    find: The privacy dashboard's activity sections (browsing history, search history, location activity, voice) and whether each holds data
+    recommended: "Clear each section that holds data"
+    action: delete
+    count: true
+    risk: medium
+    reversible: false
+    docs_checked: 2026-10-26
+    help_url: https://support.microsoft.com/topic/03d3e27f-1981-5ff4-ba1c-d6b1031ae433
+
+  - id: microsoft.connected_apps
+    module: app_audit
+    title: Apps and services with access
+    url: https://account.live.com/consent/Manage
+    find: The list of apps that have permission to access my Microsoft account
+    recommended: "Remove apps I don't recognise or haven't used in 12+ months"
+    action: revoke
+    count: true
+    risk: low
+    reversible: true
+    docs_checked: 2026-10-26
+    help_url: https://support.microsoft.com/en-us/office/security-privacy/where-can-i-find-privacy-settings-in-microsoft-products
