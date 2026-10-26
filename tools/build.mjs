@@ -53,9 +53,10 @@ writeFileSync(join(root, "dist", "PROMPT-browser-agent.md"), prompt);
 
 // ---------- 2. Guided web page ----------
 const data = adapters.map((a) => ({
-  platform: a.platform, name: a.name, notes: a.notes ?? null,
-  checks: a.checks.map(({ id, module, title, url, find, recommended, action, count, export_url, risk }) =>
-    ({ id, module, title, url, find: String(find).trim(), recommended: String(recommended).trim(), action, count: !!count, export_url, risk })),
+  platform: a.platform, name: a.name, notes: a.notes ?? null, blurb: a.blurb ?? null,
+  checks: a.checks.map(({ id, module, title, url, find, recommended, action, count, export_url, risk, heads_up, say }) =>
+    ({ id, module, title, url, find: String(find).trim(), recommended: String(recommended).trim(), action, count: !!count, export_url, risk,
+      heads_up: heads_up ?? null, say: say ?? null })),
 }));
 const core = readFileSync(join(root, "tools", "core.mjs"), "utf8").replace(/^export /gm, "");
 const tpl = readFileSync(join(root, "tools", "site.template.html"), "utf8");

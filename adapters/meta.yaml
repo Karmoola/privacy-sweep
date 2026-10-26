@@ -14,6 +14,7 @@ checks:
     action: toggle
     risk: low
     reversible: true
+    say: No, don't use it to pick your ads or content
     docs_checked: 2026-10-26
     help_url: https://www.facebook.com/help/568137493302217
 
@@ -27,6 +28,7 @@ checks:
     count: true
     risk: low
     reversible: true
+    heads_up: Meta is retiring this setting in the US and some other countries. If you can't find it, pick "Not an option for me".
     docs_checked: 2026-10-26
     help_url: https://about.fb.com/news/2026/06/better-personalization-and-changes-to-controls-for-your-activity-from-other-businesses/
 
@@ -39,6 +41,8 @@ checks:
     action: submit_form
     risk: low
     reversible: true
+    heads_up: This form only shows up in the EU and UK. Everywhere else, pick "Not an option for me".
+    say: Send the objection, if the form is there
     docs_checked: 2026-10-26
     help_url: https://www.facebook.com/privacy/genai
     needs_check: true
@@ -67,5 +71,6 @@ checks:
     count: true
     risk: low
     reversible: true
+    say: Remove apps you don't recognise or haven't used in a year
     docs_checked: 2026-10-26
     help_url: https://www.facebook.com/help/211829542181913

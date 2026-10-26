@@ -40,5 +40,6 @@ checks:
     count: true
     risk: low
     reversible: true
+    say: Remove apps you don't recognise or haven't used in a year
     docs_checked: 2026-10-26
     help_url: https://support.microsoft.com/en-us/office/security-privacy/where-can-i-find-privacy-settings-in-microsoft-products

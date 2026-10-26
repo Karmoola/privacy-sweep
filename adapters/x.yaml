@@ -38,6 +38,7 @@ checks:
     action: delete
     risk: medium
     reversible: false
+    heads_up: X doesn't document this one, so it may have moved. Tell us if you find it.
     docs_checked: 2026-10-26
     needs_check: true
     needs_check_note: Searched 'help.x.com Grok delete conversation history settings'; help.x.com/en/using-x/about-grok returned 403 and no official page mentions the delete option. Only third-party guides describe it.
@@ -52,5 +53,6 @@ checks:
     count: true
     risk: low
     reversible: true
+    say: Remove any you don't recognise or don't use
     docs_checked: 2026-10-26
     help_url: https://help.x.com/en/managing-your-account/connect-or-revoke-access-to-third-party-apps

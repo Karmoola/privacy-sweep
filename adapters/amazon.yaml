@@ -4,6 +4,7 @@ domains: [amazon.com]
 login_url: https://www.amazon.com/   # /ap/signin now 404s without query params; use the Sign in link
 verified: false
 last_checked: null
+blurb: Amazon changed how Alexa handles recordings in 2025, so some of these options may look different on your account.
 notes: Amazon changed Alexa voice-processing options in 2025 for some Echo devices. Record what options are actually offered.
 checks:
   - id: amazon.alexa_voice_history

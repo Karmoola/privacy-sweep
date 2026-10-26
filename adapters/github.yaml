@@ -15,6 +15,7 @@ checks:
     count: true
     risk: low
     reversible: true
+    say: Remove apps you haven't used in a year, or ones with more access to your code than they need
     docs_checked: 2026-10-26
     help_url: https://docs.github.com/en/apps/oauth-apps/using-oauth-apps/reviewing-your-authorized-oauth-apps
 
@@ -28,6 +29,7 @@ checks:
     count: true
     risk: low
     reversible: true
+    say: Remove any you don't recognise or don't use
     docs_checked: 2026-10-26
     help_url: https://docs.github.com/en/apps/using-github-apps/reviewing-and-revoking-authorization-of-github-apps
 
@@ -40,5 +42,6 @@ checks:
     action: toggle
     risk: low
     reversible: true
+    heads_up: GitHub renamed this one. Look for "Allow GitHub to use my data for AI model training".
     docs_checked: 2026-10-26
     help_url: https://docs.github.com/en/copilot/how-tos/manage-your-account/manage-policies

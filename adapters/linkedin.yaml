@@ -39,5 +39,6 @@ checks:
     count: true
     risk: low
     reversible: true
+    say: Remove any you don't recognise or don't use
     docs_checked: 2026-10-26
     help_url: https://www.linkedin.com/help/linkedin/answer/1207

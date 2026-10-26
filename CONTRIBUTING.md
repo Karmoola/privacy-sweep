@@ -17,6 +17,7 @@ domains: [linkedin.com]         # the agent never leaves these
 login_url: https://www.linkedin.com/login
 verified: false
 last_checked: null
+blurb: null                     # optional, shown to people under the platform name
 checks:
   - id: linkedin.ai_training    # <platform>.<snake_case>
     module: settings_sweep      # settings_sweep | recordings_purge | app_audit | do_not_sell
@@ -30,7 +31,11 @@ checks:
     risk: low                   # low | medium | high (deletes are never low)
     reversible: true            # deletes must be false
     side_effects: null          # what the user loses, in one line
+    say: null                   # optional, plain words for "Set it to" on the guided page
+    heads_up: null              # optional, one or two sentences people need before they click
 ```
+
+`find`, `recommended` and `notes` are written for agents. `say`, `heads_up` and `blurb` are what people see on the guided page, so keep them short and plain.
 
 Write `find` as a description, not a CSS selector. The agent reads the page like a person, so descriptions survive redesigns that break selectors.
 

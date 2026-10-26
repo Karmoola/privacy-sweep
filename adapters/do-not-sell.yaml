@@ -4,6 +4,7 @@ domains: ["*"]   # applies to sites on the user-approved list only
 login_url: null
 verified: false
 last_checked: null
+blurb: This tells websites not to sell or share your data. In California, Colorado and a few other states, they legally have to listen.
 notes: >
   GPC is a browser signal that California, Colorado, Connecticut, New Jersey and several other US states
   require businesses to honour as an opt-out of sale/sharing. Opt-out links are usually in the site footer
@@ -22,6 +23,7 @@ checks:
     action: manual
     risk: low
     reversible: true
+    say: "Firefox: Settings, Privacy, tick \"Tell websites not to sell or share my data\". Brave and DuckDuckGo already do it. Chrome and Edge can't yet without an extension."
     docs_checked: 2026-10-26
     help_url: https://support.mozilla.org/en-US/kb/global-privacy-control
 
@@ -34,6 +36,7 @@ checks:
     action: manual
     risk: low
     reversible: true
+    say: Open this link in your normal browser. It tells you if the signal is on.
     docs_checked: 2026-10-26
     help_url: https://globalprivacycontrol.org/
 
@@ -53,5 +56,6 @@ checks:
     count: true
     risk: low
     reversible: true
+    say: Find "Do Not Sell or Share My Personal Information" (or "Your Privacy Choices") in each site's footer and opt out. Skip anything that asks for ID.
     docs_checked: 2026-10-26
     help_url: https://cppa.ca.gov/faq.html

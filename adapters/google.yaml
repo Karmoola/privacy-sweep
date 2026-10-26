@@ -64,6 +64,7 @@ checks:
     action: toggle
     risk: low
     reversible: true
+    heads_up: Google renamed this to "Keep Activity".
     docs_checked: 2026-10-26
     help_url: https://support.google.com/gemini/answer/13278892?hl=en&co=GENIE.Platform%3DDesktop
 
@@ -105,5 +106,7 @@ checks:
     count: true
     risk: low
     reversible: true   # I can reconnect by signing in to the app again
+    heads_up: This page moved recently. If the link lands somewhere odd, look for "Linked apps" (it used to be "Third-party apps & services").
+    say: Remove apps you don't recognise or haven't used in a year
     docs_checked: 2026-10-26
     help_url: https://support.google.com/accounts/answer/13533235

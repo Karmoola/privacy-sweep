@@ -33,6 +33,7 @@ button:hover,.btn:hover{border-color:var(--ink)}
 .plat{margin:22px 0 8px;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
 .plat h2{font:700 15px/1.2 "Plex Mono",monospace;letter-spacing:.08em;margin:0;text-transform:uppercase}
 .plat .note{font-size:13px;color:var(--mute)}
+.blurb{margin:0 0 10px;font-size:15px}
 .check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px}
 .check.done{border-color:var(--accent);background:linear-gradient(var(--accent-bg),var(--accent-bg)) left/4px 100% no-repeat,var(--card)}
 .check .top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
@@ -65,6 +66,7 @@ details{margin-top:14px;font-size:14px}summary{cursor:pointer;color:var(--mute)}
 .side h3.rh{font:600 17px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;letter-spacing:0;text-transform:none}
 .hint{margin-top:8px;font-size:13px}.hint p{color:var(--mute);margin:6px 0 0}
 footer{border-top:1px solid var(--line);padding:20px 0 40px;color:var(--mute);font-size:13px}
+footer .fine{font-size:12px;margin-top:6px}
 </style>
 </head>
 <body>
@@ -108,7 +110,7 @@ footer{border-top:1px solid var(--line);padding:20px 0 40px;color:var(--mute);fo
   <p>Your ticks are kept in your own browser so you can finish later. "Start over" wipes them. The receipt only shows setting names and numbers, never your name or email, and it stays on your computer unless you post it.</p>
   <p>AI agents are a different deal. They read the pages they work on and send that to whichever AI company runs them. You still type your own passwords, but if that bugs you, stick with this page.</p>
 </section>
-<footer><div class="wrap">Made by people building Midnight. Settings move around a lot, so if one's wrong, <a href="https://github.com/Karmoola/privacy-sweep/issues">tell us on GitHub</a>. This only flips switches the companies already give you; whether they honour them is on them.</div></footer>
+<footer><div class="wrap">Made by people building Midnight. Settings move around a lot, so if one's wrong, <a href="https://github.com/Karmoola/privacy-sweep/issues">tell us on GitHub</a>. This only flips switches the companies already give you; whether they honour them is on them.<div class="fine">v__VERSION__ · Not legal advice, just good hygiene.</div></div></footer>
 
 <script>/*__HTI__*/</script>
 <script>
@@ -168,13 +170,14 @@ function renderList() {
   $("#list").innerHTML = chosen.length ? chosen.map((a) => {
     const done = a.checks.filter((c) => state.checks[c.id]?.status).length;
     return `<div class="plat"><h2>${escH(nice(a))}</h2><span class="note">${done} of ${a.checks.length}</span></div>` +
+      (a.blurb ? `<p class="blurb">${escH(a.blurb)}</p>` : "") +
       a.checks.map((c) => {
         const v = state.checks[c.id] || {};
         const open = c.url && c.url.startsWith("http") ? `<a class="btn primary" href="${escH(c.url)}" target="_blank" rel="noopener">Take me there ↗</a>` : "";
         const exp = c.export_url ? `<p class="warn">Deleted means deleted. <a href="${escH(c.export_url)}" target="_blank" rel="noopener">Grab a copy first</a> if you might miss them.</p>` : (c.module === "recordings_purge" ? `<p class="warn">Deleted means deleted. No undo.</p>` : "");
         return `<div class="check ${v.status ? "done" : ""}">
           <div class="top"><h4>${escH(c.title)}</h4></div>
-          <p class="rec">Set it to: <b>${escH(plain(c.recommended))}</b></p>${exp}
+          <p class="rec">Set it to: <b>${escH(c.say || plain(c.recommended))}</b></p>${exp}${c.heads_up ? `<p class="warn">${escH(c.heads_up)}</p>` : ""}
           <div class="row">${open}${STATUS_BUTTONS[c.module].map(([s, l]) => `<button class="st" data-id="${c.id}" data-s="${s}" aria-pressed="${v.status === s}">${l}</button>`).join("")}</div>
           ${numFields(c, v)}
           <details class="hint"><summary>Can't spot it?</summary><p>${escH(c.find)}</p></details>

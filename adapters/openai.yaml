@@ -28,5 +28,6 @@ checks:
     export_url: https://chatgpt.com/#settings/DataControls
     risk: high          # many people rely on chat history; always ask
     reversible: false
+    say: Your call. Download a copy first, then delete only if you're sure
     docs_checked: 2026-10-26
     help_url: https://help.openai.com/en/articles/8809935-how-to-delete-and-archive-chats-in-chatgpt

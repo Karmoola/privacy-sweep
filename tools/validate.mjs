@@ -11,6 +11,8 @@ const dir = join(root, "adapters");
 const MODULES = ["settings_sweep", "recordings_purge", "app_audit", "do_not_sell"];
 const ACTIONS = ["toggle", "delete", "revoke", "submit_form", "manual"];
 const RISKS = ["low", "medium", "high"];
+// Optional, shown to people on the guided page (the agent uses find/recommended).
+const HUMAN = ["heads_up", "say"];
 const REQUIRED = ["id", "module", "title", "find", "recommended", "action", "risk", "reversible"];
 
 const errors = [];
@@ -27,6 +29,7 @@ for (const file of readdirSync(dir).filter((f) => f.endsWith(".yaml")).sort()) {
   }
   const where = (c, msg) => errors.push(`${file}${c ? ` [${c.id ?? "?"}]` : ""}: ${msg}`);
   for (const k of ["platform", "name", "domains", "checks"]) if (doc[k] === undefined) where(null, `missing "${k}"`);
+  if (doc.blurb != null && typeof doc.blurb !== "string") where(null, `"blurb" must be text`);
   if (!Array.isArray(doc.checks) || doc.checks.length === 0) { where(null, "needs at least one check"); continue; }
 
   for (const c of doc.checks) {
@@ -38,6 +41,7 @@ for (const file of readdirSync(dir).filter((f) => f.endsWith(".yaml")).sort()) {
     if (!MODULES.includes(c.module)) where(c, `module must be one of ${MODULES.join(", ")}`);
     if (!ACTIONS.includes(c.action)) where(c, `action must be one of ${ACTIONS.join(", ")}`);
     if (!RISKS.includes(c.risk)) where(c, `risk must be one of ${RISKS.join(", ")}`);
+    for (const k of HUMAN) if (c[k] != null && (typeof c[k] !== "string" || !c[k].trim())) where(c, `"${k}" must be non-empty text`);
     if (c.action === "delete" && c.reversible !== false) where(c, "delete actions must set reversible: false");
     if (c.action === "delete" && c.risk === "low") where(c, "delete actions must be medium or high risk");
     if (c.url && c.url !== "per_site") {
