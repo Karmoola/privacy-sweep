@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Privacy Sweep</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; font-src data:; img-src data: blob:; connect-src data: blob:; form-action 'none'; base-uri 'none'">
 <meta name="description" content="Switch off the tracking, recordings and data sharing your accounts turned on for you. Free, runs in your browser, nothing leaves your device.">
 <style>
 /*__FONTS__*/
@@ -54,50 +55,60 @@ textarea{width:100%;min-height:110px;font:12px/1.4 "Plex Mono",monospace;border:
 details{margin-top:14px;font-size:14px}summary{cursor:pointer;color:var(--mute)}
 .msg{font-size:13px;color:var(--mute);min-height:1.2em;margin-top:6px}
 .about{padding:8px 16px 40px;max-width:760px}.about h2{font:700 15px/1.2 "Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}.about p{color:var(--mute)}
+.trust{max-width:1180px;margin:18px auto 0;padding:12px 16px;border:1px solid var(--accent);background:var(--accent-bg);border-radius:10px;font-size:15px}
+@media (max-width:1212px){.trust{margin:18px 16px 0}}
+.lede{font-size:clamp(20px,3vw,26px);color:var(--ink);margin:10px 0 4px;max-width:720px}
+.intro{color:var(--mute);font-size:17px;max-width:680px;margin:8px 0 0}
+.alt{color:var(--mute);font-size:15px;max-width:760px;margin:22px 0 30px;padding-top:16px;border-top:1px solid var(--line)}
+.linkbtn{all:unset;color:var(--accent);text-decoration:underline;cursor:pointer}
+.ask{font-size:20px;margin:0 0 4px}
+.side h3.rh{font:600 17px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;letter-spacing:0;text-transform:none}
+.hint{margin-top:8px;font-size:13px}.hint p{color:var(--mute);margin:6px 0 0}
 footer{border-top:1px solid var(--line);padding:20px 0 40px;color:var(--mute);font-size:13px}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header>
-  <h1>PRIVACY SWEEP</h1>
-  <p>Your accounts switched on tracking, kept your voice recordings, and let old apps read your email. Here's every setting, one link each. Nothing you tick here leaves your browser.</p>
+  <h1>Privacy Sweep</h1>
+  <p class="lede">Your apps said yes to a lot of things on your behalf. Let's go say no.</p>
+  <p class="intro">Every setting below is a link straight to the right page. Open it, switch it off, tick it here. Takes about half an hour and one coffee.</p>
+  <p class="intro">You log in on Google's site, not ours. We don't even have an "ours": this page is a list of links that can't phone home. <a href="#how-we-know">How do I know?</a></p>
 </header>
 
-<div class="paths">
-  <div class="path"><div class="tag">No AI · 20 to 40 min</div><h3>Do it yourself</h3><p>Pick your accounts below, open each link, flip the setting, tick it off.</p><a class="btn primary" href="#start">Start</a></div>
-  <div class="path"><div class="tag">Browser agent · 10 to 20 min</div><h3>Let a browser agent do it</h3><p>ChatGPT agent or Atlas, Perplexity Comet, Claude in Chrome, Gemini in Chrome, Copilot in Edge. Note: the agent can read pages you're logged into while it works.</p><button id="copyPrompt" class="btn primary">Copy the prompt</button> <a class="btn" id="dlPrompt" download="PROMPT-browser-agent.md">Download</a></div>
-  <div class="path"><div class="tag">Coding agent · 15 min</div><h3>Run it from a terminal</h3><p>Claude Code, Codex, Gemini CLI, Cursor or Copilot with Playwright MCP.</p><a class="btn" href="https://github.com/Karmoola/privacy-sweep" id="repoLink">Open the repo</a></div>
-</div>
+<p class="alt">Rather have a robot do the clicking? <button id="copyPrompt" class="linkbtn">Copy the prompt</button> for ChatGPT agent, Comet, Claude in Chrome or similar (<a id="dlPrompt" download="PROMPT-browser-agent.md">or download it</a>). Fair warning: it'll see the pages you're logged into. Developers, there's a <a href="https://github.com/Karmoola/privacy-sweep" id="repoLink">Claude Code version</a> too.</p>
 
 <div class="layout" id="start">
   <main>
-    <div class="mono" style="font-size:13px;color:var(--mute);letter-spacing:.06em">WHICH ACCOUNTS DO YOU HAVE?</div>
+    <h2 class="ask">Which of these do you use?</h2>
     <div class="picker" id="picker"></div>
     <div id="list"></div>
   </main>
   <aside class="side">
-    <h3>Your receipt</h3>
+    <h3 class="rh">Your receipt so far</h3>
     <div class="preview" id="preview"><div class="scale" id="scale"></div></div>
     <div class="row">
-      <button class="btn primary" id="dlCard">Download image</button>
+      <button class="btn primary" id="dlCard">Save my receipt</button>
       <button class="btn" id="reset">Start over</button>
     </div>
     <div class="msg" id="msg"></div>
     <details id="importBox">
-      <summary>Used a browser agent? Paste its receipt JSON</summary>
+      <summary>Used an AI agent? Paste what it gave you</summary>
       <textarea id="importText" placeholder='{"run_at":"...","items":[...]}'></textarea>
       <div class="row"><button class="btn" id="importBtn">Import</button></div>
     </details>
   </aside>
 </div>
 </div>
-<section class="wrap about" id="about">
-  <h2>Why we built this</h2>
-  <p>Your accounts are set to collect as much as possible by default. Privacy Sweep is one way to take some control back: free, fast, open source, and it can't see your results. No account, no analytics, everything stays in your browser.</p>
-  <p>It's a cleanup. The bigger fix is a web where you don't have to hand your data over to begin with: you prove what's needed ("I'm over 18", "I can afford this") and keep the rest. That's what we're building at <a href="https://midnight.network" target="_blank" rel="noopener">Midnight</a>.</p>
+<section class="wrap about" id="how-we-know">
+  <h2>Wait, how do I know you're not watching?</h2>
+  <p>Fair question. When you click a link, Google (or Meta, or Amazon) opens in its own tab and you log in there. Browsers don't let one website peek into another, so this page never sees what you type or what's on your screen.</p>
+  <p>On top of that, this page is locked so it can't send anything anywhere. Not to us, not to anyone. If you read code, view the source and look for <span class="mono">connect-src</span>.</p>
+  <p>If you don't, try this: save the page, turn off your Wi-Fi, open it again. Still works. There's nobody on the other end.</p>
+  <p>Your ticks are kept in your own browser so you can finish later. "Start over" wipes them. The receipt only shows setting names and numbers, never your name or email, and it stays on your computer unless you post it.</p>
+  <p>AI agents are a different deal. They read the pages they work on and send that to whichever AI company runs them. You still type your own passwords, but if that bugs you, stick with this page.</p>
 </section>
-<footer><div class="wrap">Made by people building Midnight, where proving something shouldn't mean giving everything away. · Privacy Sweep v__VERSION__ · <a href="https://github.com/Karmoola/privacy-sweep">Code on GitHub</a> · Settings move often: found one that's wrong? Open an issue. Not legal advice.</div></footer>
+<footer><div class="wrap">Made by people building Midnight. Settings move around a lot, so if one's wrong, <a href="https://github.com/Karmoola/privacy-sweep/issues">tell us on GitHub</a>. This only flips switches the companies already give you; whether they honour them is on them.</div></footer>
 
 <script>/*__HTI__*/</script>
 <script>
@@ -107,10 +118,10 @@ const PROMPT = /*__PROMPT__*/"";
 const KEY = "privacy-sweep-v1";
 const REPO = location.protocol.startsWith("http") ? (location.host + location.pathname).replace(/\/(index\.html)?$/, "") : undefined;
 const STATUS_BUTTONS = {
-  settings_sweep: [["changed","I switched it off"],["already_ok","Was already off"],["skipped","Keep it on"],["not_available","No option for me"],["not_found","Couldn't find it"]],
-  recordings_purge: [["changed","Deleted"],["already_ok","Nothing stored"],["skipped","Keep them"],["not_found","Couldn't find it"]],
-  app_audit: [["changed","Removed some"],["already_ok","All fine"],["skipped","Skip"],["not_found","Couldn't find it"]],
-  do_not_sell: [["changed","Done"],["manual","Later"],["skipped","Skip"],["not_found","Couldn't find it"]],
+  settings_sweep: [["changed","Done, it's off"],["already_ok","Was already off"],["skipped","Leaving it on"],["not_available","Not an option for me"],["not_found","Can't find it"]],
+  recordings_purge: [["changed","Deleted"],["already_ok","Nothing there"],["skipped","Keeping them"],["not_found","Can't find it"]],
+  app_audit: [["changed","Kicked some out"],["already_ok","All good"],["skipped","Skip"],["not_found","Can't find it"]],
+  do_not_sell: [["changed","Done"],["manual","Later"],["skipped","Skip"],["not_found","Can't find it"]],
 };
 const MOD_LABEL = { settings_sweep:"Setting", recordings_purge:"Recordings", app_audit:"Connected apps", do_not_sell:"Do not sell" };
 
@@ -137,35 +148,39 @@ function receipt() {
   return { run_at: state.run_at || new Date().toISOString(), items };
 }
 
+// Adapters are written for agents; show people just the first, plain part.
+const NICE = { amazon: "Amazon & Alexa", do_not_sell: "\"Do not sell my data\" (US sites)", meta: "Facebook & Instagram", x: "X / Twitter", openai: "ChatGPT" };
+const nice = (a) => NICE[a.platform] || a.name;
+const plain = (t) => { const x = String(t).split(/\. |\s\(/)[0].replace(/\.$/, ""); return x.charAt(0).toUpperCase() + x.slice(1); };
+
 function numFields(c, v) {
   const f = (k, label, ph) => `<label>${label} <input type="number" min="0" data-id="${c.id}" data-k="${k}" value="${escH(v[k])}" placeholder="${ph}"></label>`;
-  if (c.module === "recordings_purge" && c.count) return `<div class="nums">${f("before","How many were stored?","e.g. 1200")}</div>`;
-  if (c.module === "app_audit") return `<div class="nums">${f("before","Apps listed","e.g. 23")}${f("after","Apps left","e.g. 9")}${f("oldest","Oldest year","e.g. 2014")}</div>`;
-  if (c.module === "do_not_sell" && c.count) return `<div class="nums">${f("after","Sites opted out","e.g. 20")}</div>`;
+  if (c.module === "recordings_purge" && c.count) return `<div class="nums">${f("before","How many were there?","e.g. 1200")}</div>`;
+  if (c.module === "app_audit") return `<div class="nums">${f("before","Apps on the list","e.g. 23")}${f("after","Apps you kept","e.g. 9")}${f("oldest","Oldest one from","e.g. 2014")}</div>`;
+  if (c.module === "do_not_sell" && c.count) return `<div class="nums">${f("after","Sites you told","e.g. 20")}</div>`;
   if (c.count) return `<div class="nums">${f("before","Count shown","")}</div>`;
   return "";
 }
 
 function renderList() {
-  $("#picker").innerHTML = DATA.map((a) => `<label><input type="checkbox" value="${a.platform}" ${state.platforms.includes(a.platform) ? "checked" : ""}> ${escH(a.name)}</label>`).join("");
+  $("#picker").innerHTML = DATA.map((a) => `<label><input type="checkbox" value="${a.platform}" ${state.platforms.includes(a.platform) ? "checked" : ""}> ${escH(nice(a))}</label>`).join("");
   const chosen = DATA.filter((a) => state.platforms.includes(a.platform));
   $("#list").innerHTML = chosen.length ? chosen.map((a) => {
     const done = a.checks.filter((c) => state.checks[c.id]?.status).length;
-    return `<div class="plat"><h2>${escH(a.name)}</h2><span class="note">${done}/${a.checks.length} done</span></div>` +
-      (a.notes ? `<p class="note" style="margin:0 0 8px">${escH(a.notes)}</p>` : "") +
+    return `<div class="plat"><h2>${escH(nice(a))}</h2><span class="note">${done} of ${a.checks.length}</span></div>` +
       a.checks.map((c) => {
         const v = state.checks[c.id] || {};
-        const open = c.url && c.url.startsWith("http") ? `<a class="btn primary" href="${escH(c.url)}" target="_blank" rel="noopener">Open setting ↗</a>` : "";
-        const exp = c.export_url ? `<p class="warn">Deleting can't be undone. <a href="${escH(c.export_url)}" target="_blank" rel="noopener">Download a copy first</a> if you want one.</p>` : (c.module === "recordings_purge" ? `<p class="warn">Deleting can't be undone.</p>` : "");
+        const open = c.url && c.url.startsWith("http") ? `<a class="btn primary" href="${escH(c.url)}" target="_blank" rel="noopener">Take me there ↗</a>` : "";
+        const exp = c.export_url ? `<p class="warn">Deleted means deleted. <a href="${escH(c.export_url)}" target="_blank" rel="noopener">Grab a copy first</a> if you might miss them.</p>` : (c.module === "recordings_purge" ? `<p class="warn">Deleted means deleted. No undo.</p>` : "");
         return `<div class="check ${v.status ? "done" : ""}">
-          <div class="top"><h4>${escH(c.title)}</h4><span class="mod">${MOD_LABEL[c.module]}</span></div>
-          <p class="find">${escH(c.find)}</p>
-          <p class="rec"><b>Recommended:</b> ${escH(c.recommended)}</p>${exp}
+          <div class="top"><h4>${escH(c.title)}</h4></div>
+          <p class="rec">Set it to: <b>${escH(plain(c.recommended))}</b></p>${exp}
           <div class="row">${open}${STATUS_BUTTONS[c.module].map(([s, l]) => `<button class="st" data-id="${c.id}" data-s="${s}" aria-pressed="${v.status === s}">${l}</button>`).join("")}</div>
           ${numFields(c, v)}
+          <details class="hint"><summary>Can't spot it?</summary><p>${escH(c.find)}</p></details>
         </div>`;
       }).join("");
-  }).join("") : `<p style="color:var(--mute)">Pick the accounts you have to see their settings.</p>`;
+  }).join("") : `<p style="color:var(--mute)">Tick the ones you use and their settings show up here.</p>`;
 }
 
 function renderCard() {
@@ -208,8 +223,8 @@ document.addEventListener("click", (e) => {
 });
 $("#reset").onclick = () => { if (confirm("Clear your progress on this device?")) { state = { platforms: [], checks: {}, imported: null, run_at: null }; update(); } };
 $("#copyPrompt").onclick = async () => {
-  try { await navigator.clipboard.writeText(PROMPT); $("#copyPrompt").textContent = "Copied. Paste it into your agent"; }
-  catch { $("#copyPrompt").textContent = "Copy blocked: use Download"; }
+  try { await navigator.clipboard.writeText(PROMPT); $("#copyPrompt").textContent = "Copied. Paste it into your agent."; }
+  catch { $("#copyPrompt").textContent = "Couldn't copy. Use the download link."; }
 };
 $("#dlPrompt").href = URL.createObjectURL(new Blob([PROMPT], { type: "text/markdown" }));
 $("#importBtn").onclick = () => {
@@ -226,7 +241,7 @@ $("#dlCard").onclick = async () => {
   try {
     const url = await htmlToImage.toPng(stage, { pixelRatio: 2, width: 1080, height: 1350 });
     const a = document.createElement("a"); a.href = url; a.download = "privacy-sweep-receipt.png"; a.click();
-    $("#msg").textContent = "Saved. Post it with #PrivacySweep.";
+    $("#msg").textContent = "Saved. Go on, post it.";
   } catch { $("#msg").textContent = "Couldn't make the image. Take a screenshot instead."; }
   finally { $("#scale").style.transform = t; }
 };
